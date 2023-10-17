@@ -30,31 +30,36 @@ def main():
     
     if user_input:
         corrected_input = tp.correct_Levenshtein(tp.correct_spelling(user_input), tp.new_words)
-        print(corrected_input)
         
         result_data = {
             'Model': [],
-            'Prediction': [],
-            'Probability': []
+            'Classe Prédite': [],
+            'Certitude du choix': []
         }
         
         for model_name, model_data in models.items():
             preprocessor = model_data.get('preprocessor', None)
             input_text = preprocessor(corrected_input) if preprocessor else corrected_input
-            print('inside')
-            print(input_text)
             if model_name == 'FastText':
                 prediction, probability = classify_text_fasttext(input_text, model_data['model'])
             else:
                 prediction, probability = classify_text(input_text, model_data['model'], model_data['vectorizer'])
             result_data['Model'].append(model_name)
-            result_data['Prediction'].append(f"{'Une WZ !' if prediction else 'Pas une WZ'}")
-            result_data['Probability'].append(f"{probability:.2f}")
+            result_data['Classe Prédite'].append(f"{'Une WZ !' if prediction else 'Pas une WZ'}")
+            result_data['Certitude du choix'].append(f"{probability:.2f}")
         
         result_df = pd.DataFrame(result_data)
         
         # Display the results in a table
         st.table(result_df)
-
+        st.write('NB:')
+        st.markdown(
+        """
+        * SVM classifie par rapport à une seul classe donc :
+            * Si la certitude est proche de 1 alors cela veut dire que la phrase fait partie de la classe WZ.
+            * Si la certitude est proche de 0 alors cela veut dire que la phrase ne fait pas partie de la classe WZ.
+        * Pour FastText, ça donne le pourcentage de certitude que la phrase appartient à la classe prédite.
+        """
+        )
 if __name__ == "__main__":
     main()
