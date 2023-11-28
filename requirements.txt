@@ -9,3 +9,8 @@ nltk
 python-Levenshtein
 pyspellchecker
 scikit-learn
+folium
+requests
+pandas
+pydeck
+geopandas
