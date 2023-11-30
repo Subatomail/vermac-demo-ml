@@ -115,6 +115,19 @@ def main():
 
         # Display the filtered dataset
         display_data(filtered_data)
+    
+    precision_data = {
+        'Méthode': [
+            'Distance de conduite',
+            'Distance de conduite avec pénalités',
+            'Temps de conduite',
+            'Temps et distance de conduite'
+        ],
+        'Précision Globale': ['51 %', '51 %', '67 %', '79 %']
+    }
+
+    precision_df = pd.DataFrame(precision_data)
+    st.table(precision_df)
 
 
 
